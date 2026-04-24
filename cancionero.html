@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cancionero Personal</title>
+  <style>
+    :root {
+      --bg: #080b0c;
+      --panel: #111719;
+      --panel2: #172022;
+      --text: #d7ffe0;
+      --muted: #8fb69a;
+      --green: #33ff77;
+      --blue: #46a3ff;
+      --yellow: #ffd166;
+      --danger: #ff5c7a;
+      --border: #25402c;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #10251a, var(--bg));
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    header {
+      padding: 18px 20px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(0,0,0,0.45);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      backdrop-filter: blur(8px);
+    }
+
+    header h1 {
+      margin: 0;
+      color: var(--blue);
+      font-size: 1.5rem;
+      letter-spacing: 0.5px;
+    }
+
+    header p {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .app {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 16px;
+      padding: 16px;
+    }
+
+    .panel {
+      background: linear-gradient(180deg, var(--panel), #0b1011);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 14px;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.25);
+    }
+
+    .controls {
+      display: grid;
+      gap: 10px;
+    }
+
+    input, textarea, select, button {
+      width: 100%;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: #050808;
+      color: var(--text);
+      padding: 10px;
+      font-size: 0.95rem;
+    }
+
+    textarea {
+      min-height: 260px;
+      resize: vertical;
+      line-height: 1.55;
+      font-family: "Courier New", monospace;
+    }
+
+    button {
+      cursor: pointer;
+      font-weight: 700;
+      transition: transform 0.08s ease, background 0.15s ease;
+    }
+
+    button:hover { background: #102318; }
+    button:active { transform: scale(0.98); }
+
+    .btn-blue { color: white; background: #0c4b84; border-color: #2d84d9; }
+    .btn-green { color: #001b08; background: var(--green); border-color: #79ffa3; }
+    .btn-yellow { color: #1c1300; background: var(--yellow); border-color: #ffe29a; }
+    .btn-red { color: white; background: #802034; border-color: var(--danger); }
+
+    .button-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .song-list {
+      display: grid;
+      gap: 8px;
+      margin-top: 12px;
+      max-height: 65vh;
+      overflow: auto;
+      padding-right: 4px;
+    }
+
+    .song-item {
+      padding: 10px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: var(--panel2);
+      cursor: pointer;
+    }
+
+    .song-item.active {
+      border-color: var(--green);
+      box-shadow: 0 0 0 2px rgba(51,255,119,0.12);
+    }
+
+    .song-item strong {
+      display: block;
+      color: var(--yellow);
+      margin-bottom: 3px;
+    }
+
+    .song-item small { color: var(--muted); }
+
+    .viewer-top {
+      display: grid;
+      grid-template-columns: 1fr 180px;
+      gap: 12px;
+      align-items: start;
+      margin-bottom: 12px;
+    }
+
+    .title-box h2 {
+      margin: 0;
+      color: var(--blue);
+      font-size: 1.7rem;
+    }
+
+    .title-box .meta {
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    .transpose-box {
+      display: grid;
+      gap: 8px;
+    }
+
+    .song-display {
+      white-space: pre-wrap;
+      background: #020403;
+      color: var(--green);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 18px;
+      font-family: "Courier New", monospace;
+      font-size: 1.02rem;
+      line-height: 1.7;
+      min-height: 420px;
+      max-height: 68vh;
+      overflow: auto;
+    }
+
+    .chord {
+      color: var(--yellow);
+      font-weight: 900;
+      text-shadow: 0 0 10px rgba(255,209,102,0.35);
+    }
+
+    .edit-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .hidden { display: none; }
+
+    .hint {
+      color: var(--muted);
+      font-size: 0.86rem;
+      line-height: 1.35;
+    }
+
+    .capo-box {
+      margin-top: 10px;
+      padding: 10px;
+      border: 1px dashed var(--border);
+      border-radius: 12px;
+      color: var(--muted);
+    }
+
+    @media (max-width: 850px) {
+      .app { grid-template-columns: 1fr; }
+      .viewer-top { grid-template-columns: 1fr; }
+      .edit-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>🎸 Cancionero Personal</h1>
+    <p>Guarda tus canciones, busca rápido, transpón tonos y ensaya con modo teleprompter.</p>
+  </header>
+
+  <main class="app">
+    <section class="panel">
+      <div class="controls">
+        <input id="searchInput" type="search" placeholder="Buscar canción..." />
+        <button class="btn-green" onclick="newSong()">➕ Nueva canción</button>
+        <button class="btn-blue" onclick="openWebSearch()">🌐 Buscar en la web</button>
+        <p class="hint">Tip: busca la canción en internet, copia la letra/acordes y pégala aquí manualmente.</p>
+      </div>
+
+      <div id="songList" class="song-list"></div>
+    </section>
+
+    <section class="panel">
+      <div id="viewer">
+        <div class="viewer-top">
+          <div class="title-box">
+            <h2 id="songTitle">Selecciona una canción</h2>
+            <div class="meta" id="songMeta">Tono: - | Capo: -</div>
+          </div>
+
+          <div class="transpose-box">
+            <div class="button-row">
+              <button onclick="transposeCurrent(-1)">⬇️ ½ tono</button>
+              <button onclick="transposeCurrent(1)">⬆️ ½ tono</button>
+            </div>
+            <button class="btn-yellow" onclick="toggleAutoscroll()">▶️ Teleprompter</button>
+            <button class="btn-blue" onclick="editCurrentSong()">✏️ Editar</button>
+          </div>
+        </div>
+
+        <div id="songDisplay" class="song-display">Aquí aparecerá tu canción.</div>
+
+        <div class="capo-box" id="capoSuggestion">
+          Capo/diapasón: después agregaremos sugerencias automáticas según el tono.
+        </div>
+      </div>
+
+      <div id="editor" class="hidden">
+        <div class="edit-grid">
+          <input id="titleInput" placeholder="Título, ejemplo: Stand By Me" />
+          <input id="artistInput" placeholder="Artista, ejemplo: Ben E. King" />
+          <select id="keyInput">
+            <option value="C">C</option><option value="C#">C# / Db</option><option value="D">D</option><option value="D#">D# / Eb</option>
+            <option value="E">E</option><option value="F">F</option><option value="F#">F# / Gb</option><option value="G">G</option>
+            <option value="G#">G# / Ab</option><option value="A">A</option><option value="A#">A# / Bb</option><option value="B">B</option>
+          </select>
+          <input id="capoInput" type="number" min="0" max="12" placeholder="Capo/diapasón, ejemplo: 2" />
+        </div>
+
+        <br />
+        <textarea id="lyricsInput" placeholder="Pega aquí la letra con acordes. Ejemplo:\nG        Em\nWhen the night has come...\nC        D        G"></textarea>
+
+        <br /><br />
+        <div class="button-row">
+          <button class="btn-green" onclick="saveSong()">💾 Guardar</button>
+          <button onclick="cancelEdit()">Cancelar</button>
+        </div>
+        <br />
+        <button class="btn-red" onclick="deleteCurrentSong()">🗑️ Borrar canción</button>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const STORAGE_KEY = "cancionero_personal_v1";
+    const notesSharp = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
+    const flatToSharp = { "Db": "C#", "Eb": "D#", "Gb": "F#", "Ab": "G#", "Bb": "A#" };
+
+    let songs = loadSongs();
+    let currentId = songs[0]?.id || null;
+    let autoscrollTimer = null;
+    let editingId = null;
+
+    function starterSongs() {
+      return [
+        {
+          id: crypto.randomUUID(),
+          title: "Ejemplo campirano",
+          artist: "Práctica",
+          key: "G",
+          capo: 0,
+          lyrics: "G              D\nAquí va la letra de tu canción\nEm             C\ncon los acordes arriba\nG              D\ny después la vas cambiando\nC      D       G\na tu tono favorito."
+        }
+      ];
+    }
+
+    function loadSongs() {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (!saved) return starterSongs();
+      try { return JSON.parse(saved); }
+      catch { return starterSongs(); }
+    }
+
+    function persist() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(songs));
+    }
+
+    function renderList() {
+      const q = document.getElementById("searchInput").value.toLowerCase().trim();
+      const list = document.getElementById("songList");
+      list.innerHTML = "";
+
+      const filtered = songs.filter(song =>
+        song.title.toLowerCase().includes(q) ||
+        song.artist.toLowerCase().includes(q) ||
+        song.lyrics.toLowerCase().includes(q)
+      );
+
+      if (filtered.length === 0) {
+        list.innerHTML = `<p class="hint">No encontré canciones con esa búsqueda.</p>`;
+        return;
+      }
+
+      filtered.forEach(song => {
+        const item = document.createElement("div");
+        item.className = "song-item" + (song.id === currentId ? " active" : "");
+        item.innerHTML = `<strong>${escapeHtml(song.title)}</strong><small>${escapeHtml(song.artist)} · Tono ${song.key}</small>`;
+        item.onclick = () => selectSong(song.id);
+        list.appendChild(item);
+      });
+    }
+
+    function selectSong(id) {
+      currentId = id;
+      showViewer();
+      renderList();
+      renderSong();
+    }
+
+    function getCurrentSong() {
+      return songs.find(s => s.id === currentId);
+    }
+
+    function renderSong() {
+      const song = getCurrentSong();
+      const title = document.getElementById("songTitle");
+      const meta = document.getElementById("songMeta");
+      const display = document.getElementById("songDisplay");
+
+      if (!song) {
+        title.textContent = "Selecciona una canción";
+        meta.textContent = "Tono: - | Capo: -";
+        display.textContent = "Aquí aparecerá tu canción.";
+        return;
+      }
+
+      title.textContent = song.title;
+      meta.textContent = `${song.artist} | Tono: ${song.key} | Capo/diapasón: ${song.capo || 0}`;
+      display.innerHTML = highlightChords(song.lyrics);
+      document.getElementById("capoSuggestion").textContent = capoText(song.key, song.capo || 0);
+    }
+
+    function highlightChords(text) {
+      const chordRegex = /\b([A-G](?:#|b)?(?:m|maj7|m7|7|sus2|sus4|dim|aug|add9)?(?:\/[A-G](?:#|b)?)?)\b/g;
+      return escapeHtml(text).replace(chordRegex, `<span class="chord">$1</span>`);
+    }
+
+    function normalizeNote(note) {
+      return flatToSharp[note] || note;
+    }
+
+    function transposeNote(note, steps) {
+      const normalized = normalizeNote(note);
+      const index = notesSharp.indexOf(normalized);
+      if (index === -1) return note;
+      return notesSharp[(index + steps + 1200) % 12];
+    }
+
+    function transposeChord(chord, steps) {
+      return chord.replace(/^([A-G](?:#|b)?)(.*?)(?:\/([A-G](?:#|b)?))?$/, (_, root, quality, bass) => {
+        const newRoot = transposeNote(root, steps);
+        const newBass = bass ? "/" + transposeNote(bass, steps) : "";
+        return newRoot + quality + newBass;
+      });
+    }
+
+    function transposeLyrics(text, steps) {
+      const chordRegex = /\b([A-G](?:#|b)?(?:m|maj7|m7|7|sus2|sus4|dim|aug|add9)?(?:\/[A-G](?:#|b)?)?)\b/g;
+      return text.replace(chordRegex, chord => transposeChord(chord, steps));
+    }
+
+    function transposeCurrent(steps) {
+      const song = getCurrentSong();
+      if (!song) return;
+      song.lyrics = transposeLyrics(song.lyrics, steps);
+      song.key = transposeNote(song.key, steps);
+      persist();
+      renderList();
+      renderSong();
+    }
+
+    function newSong() {
+      editingId = null;
+      document.getElementById("titleInput").value = "";
+      document.getElementById("artistInput").value = "";
+      document.getElementById("keyInput").value = "G";
+      document.getElementById("capoInput").value = 0;
+      document.getElementById("lyricsInput").value = "";
+      showEditor();
+    }
+
+    function editCurrentSong() {
+      const song = getCurrentSong();
+      if (!song) return;
+      editingId = song.id;
+      document.getElementById("titleInput").value = song.title;
+      document.getElementById("artistInput").value = song.artist;
+      document.getElementById("keyInput").value = song.key;
+      document.getElementById("capoInput").value = song.capo || 0;
+      document.getElementById("lyricsInput").value = song.lyrics;
+      showEditor();
+    }
+
+    function saveSong() {
+      const data = {
+        title: document.getElementById("titleInput").value.trim() || "Sin título",
+        artist: document.getElementById("artistInput").value.trim() || "Sin artista",
+        key: document.getElementById("keyInput").value,
+        capo: Number(document.getElementById("capoInput").value || 0),
+        lyrics: document.getElementById("lyricsInput").value
+      };
+
+      if (editingId) {
+        songs = songs.map(song => song.id === editingId ? { ...song, ...data } : song);
+        currentId = editingId;
+      } else {
+        const newItem = { id: crypto.randomUUID(), ...data };
+        songs.unshift(newItem);
+        currentId = newItem.id;
+      }
+
+      persist();
+      showViewer();
+      renderList();
+      renderSong();
+    }
+
+    function deleteCurrentSong() {
+      const song = getCurrentSong();
+      if (!song) return;
+      const ok = confirm(`¿Borrar "${song.title}"?`);
+      if (!ok) return;
+      songs = songs.filter(s => s.id !== song.id);
+      currentId = songs[0]?.id || null;
+      persist();
+      showViewer();
+      renderList();
+      renderSong();
+    }
+
+    function cancelEdit() {
+      showViewer();
+      renderSong();
+    }
+
+    function showEditor() {
+      document.getElementById("viewer").classList.add("hidden");
+      document.getElementById("editor").classList.remove("hidden");
+    }
+
+    function showViewer() {
+      document.getElementById("editor").classList.add("hidden");
+      document.getElementById("viewer").classList.remove("hidden");
+    }
+
+    function toggleAutoscroll() {
+      const box = document.getElementById("songDisplay");
+      if (autoscrollTimer) {
+        clearInterval(autoscrollTimer);
+        autoscrollTimer = null;
+        return;
+      }
+      autoscrollTimer = setInterval(() => {
+        box.scrollTop += 1;
+        if (box.scrollTop + box.clientHeight >= box.scrollHeight) {
+          clearInterval(autoscrollTimer);
+          autoscrollTimer = null;
+        }
+      }, 90);
+    }
+
+    function openWebSearch() {
+      const q = document.getElementById("searchInput").value.trim() || "acordes canción guitarra";
+      const url = "https://www.google.com/search?q=" + encodeURIComponent(q + " acordes guitarra");
+      window.open(url, "_blank");
+    }
+
+    function capoText(key, capo) {
+      if (!capo) return `Capo/diapasón: sin capo. Tono actual: ${key}.`;
+      const openKey = transposeNote(key, -capo);
+      return `Capo/diapasón en traste ${capo}: toca como si fuera ${openKey}, sonará en ${key}.`;
+    }
+
+    function escapeHtml(str) {
+      return String(str)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    document.getElementById("searchInput").addEventListener("input", renderList);
+
+    renderList();
+    renderSong();
+  </script>
+</body>
+</html>
