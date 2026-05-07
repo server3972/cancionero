@@ -3,16 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Cancionero Terminal Pro</title>
 
 <style>
-
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-}
+*{margin:0;padding:0;box-sizing:border-box}
 
 body{
     font-family:Arial, Helvetica, sans-serif;
@@ -21,39 +15,33 @@ body{
     overflow:hidden;
 }
 
-.container{
-    display:flex;
-    height:100vh;
-}
+.container{display:flex;height:100vh}
 
 .sidebar{
-    width:260px;
+    width:300px;
     background:#0d0d0d;
     border-right:2px solid #39ff88;
-    padding:15px;
+    padding:18px;
     overflow-y:auto;
 }
 
-.sidebar h2{
-    margin-bottom:15px;
-    text-align:center;
-}
+.sidebar h2{margin-bottom:20px;font-size:30px}
 
 .sidebar input{
     width:100%;
-    padding:10px;
-    margin-bottom:10px;
+    padding:14px;
     background:#000;
     color:#39ff88;
     border:1px solid #39ff88;
+    font-size:17px;
+    margin-bottom:15px;
 }
 
 .song-item{
-    padding:10px;
+    padding:12px;
     border:1px solid #39ff88;
     margin-bottom:8px;
     cursor:pointer;
-    transition:0.2s;
 }
 
 .song-item:hover{
@@ -61,31 +49,27 @@ body{
     color:#000;
 }
 
-.main{
-    flex:1;
-    display:flex;
-    flex-direction:column;
-}
+.main{flex:1;display:flex;flex-direction:column}
 
 .header{
-    padding:10px;
+    padding:12px;
     border-bottom:2px solid #39ff88;
     display:flex;
     flex-wrap:wrap;
-    gap:10px;
+    gap:12px;
     background:#0d0d0d;
 }
 
-.header button{
-    padding:10px;
+button{
+    padding:13px 18px;
     background:#000;
     color:#39ff88;
     border:1px solid #39ff88;
     cursor:pointer;
-    transition:0.2s;
+    font-size:16px;
 }
 
-.header button:hover{
+button:hover{
     background:#39ff88;
     color:#000;
 }
@@ -98,16 +82,15 @@ textarea{
     border:none;
     outline:none;
     resize:none;
-    padding:20px;
-    font-size:20px;
-    line-height:1.8;
+    padding:22px;
+    font-size:22px;
+    line-height:1.7;
 }
 
 .teleprompter{
-    font-size:38px;
-    line-height:2.5;
+    font-size:34px;
+    line-height:2.3;
 }
-
 </style>
 </head>
 
@@ -117,157 +100,107 @@ textarea{
 
     <div class="sidebar">
         <h2>🎸 Cancionero Pro</h2>
-
         <input type="text" id="songTitle" placeholder="Nombre de la canción">
-
         <div id="songList"></div>
     </div>
 
     <div class="main">
 
         <div class="header">
-
             <button onclick="newSong()">Nueva</button>
-
             <button onclick="saveSong()">Guardar</button>
-
             <button onclick="deleteSong()">Borrar</button>
-
             <button onclick="transpose(1)">⬆ Medio tono</button>
-
             <button onclick="transpose(-1)">⬇ Medio tono</button>
-
             <button onclick="transpose(2)">⬆ Tono</button>
-
             <button onclick="transpose(-2)">⬇ Tono</button>
-
             <button onclick="toggleTeleprompter()">🎤 Teleprompter</button>
-
         </div>
 
-<textarea id="songContent">
-
-</textarea>
+        <textarea id="songContent" placeholder="Pega aquí tu rola..."></textarea>
 
     </div>
 
 </div>
 
 <script>
-
-const notes = [
-"C","C#","D","D#","E","F",
-"F#","G","G#","A","A#","B"
-];
-
-let songs = JSON.parse(localStorage.getItem("songs")) || {};
+let songs = JSON.parse(localStorage.getItem("cancioneroSongs")) || {};
 
 function renderSongs(){
-
     const songList = document.getElementById("songList");
-
     songList.innerHTML = "";
 
-    for(let title in songs){
-
+    Object.keys(songs).forEach(title=>{
         const div = document.createElement("div");
-
         div.className = "song-item";
-
         div.innerText = title;
-
-        div.onclick = ()=>loadSong(title);
-
+        div.onclick = function(){
+            loadSong(title);
+        };
         songList.appendChild(div);
-    }
+    });
 }
 
 function saveSong(){
-
-    const title = document.getElementById("songTitle").value;
-
+    const title = document.getElementById("songTitle").value.trim();
     const content = document.getElementById("songContent").value;
 
-    if(title.trim()=="") return;
+    if(title === ""){
+        alert("Ponle nombre a la canción primero, my friend 🎸");
+        return;
+    }
 
     songs[title] = content;
-
-    localStorage.setItem("songs", JSON.stringify(songs));
-
+    localStorage.setItem("cancioneroSongs", JSON.stringify(songs));
     renderSongs();
+
+    alert("Canción guardada ✅");
 }
 
 function loadSong(title){
-
     document.getElementById("songTitle").value = title;
-
     document.getElementById("songContent").value = songs[title];
 }
 
 function deleteSong(){
+    const title = document.getElementById("songTitle").value.trim();
 
-    const title = document.getElementById("songTitle").value;
+    if(title === "") return;
 
     delete songs[title];
-
-    localStorage.setItem("songs", JSON.stringify(songs));
-
+    localStorage.setItem("cancioneroSongs", JSON.stringify(songs));
     renderSongs();
-
     newSong();
 }
 
 function newSong(){
-
     document.getElementById("songTitle").value = "";
-
     document.getElementById("songContent").value = "";
 }
 
 function transpose(step){
-
-    let content = document.getElementById("songContent").value;
-
-    notes.forEach((note,index)=>{
-
-        const regex = new RegExp(`\\b${note}\\b`,"g");
-
-        const newNote =
-        notes[(index + step + notes.length) % notes.length];
-
-        content = content.replace(regex,newNote);
-    });
-
-    document.getElementById("songContent").value = content;
+    alert("La transposición la arreglamos después. Ahorita dejamos seguro el guardado 🎸");
 }
 
 let teleprompter = false;
-let scrollInterval;
+let scrollInterval = null;
 
 function toggleTeleprompter(){
-
     const textarea = document.getElementById("songContent");
 
     teleprompter = !teleprompter;
-
     textarea.classList.toggle("teleprompter");
 
     if(teleprompter){
-
         scrollInterval = setInterval(()=>{
-
             textarea.scrollTop += 1;
-
         },80);
-
     }else{
-
         clearInterval(scrollInterval);
     }
 }
 
 renderSongs();
-
 </script>
 
 </body>
