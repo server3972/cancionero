@@ -6,90 +6,204 @@
 <title>Cancionero Terminal Pro</title>
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
 
 body{
-    font-family:Arial, Helvetica, sans-serif;
+    font-family: Arial, Helvetica, sans-serif;
     background:#050505;
     color:#39ff88;
     overflow:hidden;
 }
 
-.container{display:flex;height:100vh}
+.container{
+    display:flex;
+    height:100vh;
+}
+
+/* PANEL IZQUIERDO */
 
 .sidebar{
-    width:300px;
-    background:#0d0d0d;
-    border-right:2px solid #39ff88;
-    padding:18px;
-    overflow-y:auto;
-}
-
-.sidebar h2{margin-bottom:20px;font-size:30px}
-
-.sidebar input{
-    width:100%;
-    padding:14px;
-    background:#000;
-    color:#39ff88;
-    border:1px solid #39ff88;
-    font-size:17px;
-    margin-bottom:15px;
-}
-
-.song-item{
-    padding:12px;
-    border:1px solid #39ff88;
-    margin-bottom:8px;
-    cursor:pointer;
-}
-
-.song-item:hover{
-    background:#39ff88;
-    color:#000;
-}
-
-.main{flex:1;display:flex;flex-direction:column}
-
-.header{
-    padding:12px;
-    border-bottom:2px solid #39ff88;
+    width:320px;
+    background:#081108;
+    border-right:2px solid #1f8f4d;
     display:flex;
-    flex-wrap:wrap;
-    gap:12px;
-    background:#0d0d0d;
+    flex-direction:column;
 }
 
-button{
-    padding:13px 18px;
-    background:#000;
+.logo{
+    padding:20px;
+    font-size:24px;
+    font-weight:bold;
+    border-bottom:1px solid #1f8f4d;
+    text-align:center;
+    color:#7dffb1;
+}
+
+.search{
+    padding:15px;
+}
+
+.search input{
+    width:100%;
+    padding:12px;
+    border:none;
+    border-radius:10px;
+    background:#021402;
     color:#39ff88;
-    border:1px solid #39ff88;
-    cursor:pointer;
+    border:1px solid #1f8f4d;
     font-size:16px;
 }
 
+.song-list{
+    flex:1;
+    overflow-y:auto;
+    padding:10px;
+}
+
+.song-item{
+    background:#0d1f13;
+    border:1px solid #1f8f4d;
+    border-radius:12px;
+    padding:14px;
+    margin-bottom:10px;
+    cursor:pointer;
+    transition:0.2s;
+}
+
+.song-item:hover{
+    background:#14301d;
+    transform:scale(1.02);
+}
+
+.song-title{
+    font-size:18px;
+    font-weight:bold;
+    color:#9effc6;
+}
+
+.song-tone{
+    margin-top:5px;
+    color:#66ffaa;
+}
+
+/* PANEL DERECHO */
+
+.main{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+}
+
+/* TOPBAR */
+
+.topbar{
+    background:#081108;
+    border-bottom:2px solid #1f8f4d;
+    padding:15px;
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+}
+
+button{
+    background:#138a43;
+    border:none;
+    color:white;
+    padding:12px 18px;
+    border-radius:10px;
+    cursor:pointer;
+    font-weight:bold;
+    transition:0.2s;
+}
+
 button:hover{
-    background:#39ff88;
-    color:#000;
+    background:#19b85a;
+}
+
+.editor{
+    flex:1;
+    padding:20px;
+    overflow:auto;
+}
+
+.song-name{
+    width:100%;
+    padding:14px;
+    margin-bottom:15px;
+    background:#021402;
+    border:1px solid #1f8f4d;
+    border-radius:10px;
+    color:#39ff88;
+    font-size:22px;
 }
 
 textarea{
-    flex:1;
     width:100%;
-    background:#050505;
-    color:#39ff88;
-    border:none;
-    outline:none;
-    resize:none;
-    padding:22px;
+    height:75vh;
+    background:#021402;
+    border:1px solid #1f8f4d;
+    border-radius:12px;
+    color:#7dffb1;
+    padding:20px;
     font-size:22px;
-    line-height:1.7;
+    resize:none;
+    line-height:1.8;
+    font-family: Consolas, monospace;
 }
 
+/* TELEPROMPTER */
+
 .teleprompter{
-    font-size:34px;
-    line-height:2.3;
+    position:fixed;
+    inset:0;
+    background:black;
+    color:#39ff88;
+    display:none;
+    z-index:999;
+    overflow:auto;
+    padding:60px;
+    font-size:42px;
+    line-height:2;
+    white-space:pre-wrap;
+}
+
+.close-prompter{
+    position:fixed;
+    top:20px;
+    right:20px;
+    z-index:1000;
+}
+
+/* RESPONSIVE */
+
+@media(max-width:900px){
+
+.container{
+    flex-direction:column;
+}
+
+.sidebar{
+    width:100%;
+    height:260px;
+}
+
+textarea{
+    height:55vh;
+    font-size:18px;
+}
+
+.song-name{
+    font-size:18px;
+}
+
+.topbar{
+    justify-content:center;
+}
+
 }
 </style>
 </head>
@@ -98,109 +212,246 @@ textarea{
 
 <div class="container">
 
+    <!-- SIDEBAR -->
+
     <div class="sidebar">
-        <h2>🎸 Cancionero Pro</h2>
-        <input type="text" id="songTitle" placeholder="Nombre de la canción">
-        <div id="songList"></div>
+
+        <div class="logo">
+            🎸 Cancionero Pro
+        </div>
+
+        <div class="search">
+            <input type="text" id="searchInput" placeholder="Buscar canción...">
+        </div>
+
+        <div class="song-list" id="songList">
+        </div>
+
     </div>
+
+    <!-- MAIN -->
 
     <div class="main">
 
-        <div class="header">
+        <div class="topbar">
+
             <button onclick="newSong()">Nueva</button>
+
             <button onclick="saveSong()">Guardar</button>
+
             <button onclick="deleteSong()">Borrar</button>
+
             <button onclick="transpose(1)">⬆ Medio tono</button>
+
             <button onclick="transpose(-1)">⬇ Medio tono</button>
+
             <button onclick="transpose(2)">⬆ Tono</button>
+
             <button onclick="transpose(-2)">⬇ Tono</button>
-            <button onclick="toggleTeleprompter()">🎤 Teleprompter</button>
+
+            <button onclick="openPrompter()">🎤 Teleprompter</button>
+
         </div>
 
-        <textarea id="songContent" placeholder="Pega aquí tu rola..."></textarea>
+        <div class="editor">
+
+            <input 
+                type="text"
+                class="song-name"
+                id="songName"
+                placeholder="Nombre de la canción..."
+            >
+
+            <textarea id="songContent" placeholder="Pega aquí la letra y acordes..."></textarea>
+
+        </div>
 
     </div>
 
 </div>
 
+<!-- TELEPROMPTER -->
+
+<div class="teleprompter" id="teleprompter">
+    <button class="close-prompter" onclick="closePrompter()">Cerrar</button>
+    <div id="prompterContent"></div>
+</div>
+
 <script>
-let songs = JSON.parse(localStorage.getItem("cancioneroSongs")) || {};
+
+let songs = JSON.parse(localStorage.getItem("cancioneroSongs")) || [];
+
+let currentSong = null;
+
+const notes = [
+    "C","C#","D","D#","E","F",
+    "F#","G","G#","A","A#","B"
+];
 
 function renderSongs(){
+
     const songList = document.getElementById("songList");
+
     songList.innerHTML = "";
 
-    Object.keys(songs).forEach(title=>{
+    const search = document.getElementById("searchInput")
+        .value
+        .toLowerCase();
+
+    songs
+    .filter(song => song.name.toLowerCase().includes(search))
+    .forEach(song => {
+
         const div = document.createElement("div");
+
         div.className = "song-item";
-        div.innerText = title;
-        div.onclick = function(){
-            loadSong(title);
-        };
+
+        div.innerHTML = `
+            <div class="song-title">${song.name}</div>
+            <div class="song-tone">🎵 Canción guardada</div>
+        `;
+
+        div.onclick = () => loadSong(song.id);
+
         songList.appendChild(div);
+
     });
+
 }
 
 function saveSong(){
-    const title = document.getElementById("songTitle").value.trim();
+
+    const name = document.getElementById("songName").value.trim();
+
     const content = document.getElementById("songContent").value;
 
-    if(title === ""){
-        alert("Ponle nombre a la canción primero, my friend 🎸");
+    if(!name){
+        alert("Pon nombre a la canción");
         return;
     }
 
-    songs[title] = content;
-    localStorage.setItem("cancioneroSongs", JSON.stringify(songs));
+    if(currentSong){
+
+        const song = songs.find(s => s.id === currentSong);
+
+        song.name = name;
+        song.content = content;
+
+    }else{
+
+        songs.push({
+            id:Date.now(),
+            name,
+            content
+        });
+
+    }
+
+    localStorage.setItem(
+        "cancioneroSongs",
+        JSON.stringify(songs)
+    );
+
     renderSongs();
 
-    alert("Canción guardada ✅");
+    alert("Canción guardada 🎸");
+
 }
 
-function loadSong(title){
-    document.getElementById("songTitle").value = title;
-    document.getElementById("songContent").value = songs[title];
-}
+function loadSong(id){
 
-function deleteSong(){
-    const title = document.getElementById("songTitle").value.trim();
+    const song = songs.find(s => s.id === id);
 
-    if(title === "") return;
+    if(!song) return;
 
-    delete songs[title];
-    localStorage.setItem("cancioneroSongs", JSON.stringify(songs));
-    renderSongs();
-    newSong();
+    currentSong = id;
+
+    document.getElementById("songName").value = song.name;
+
+    document.getElementById("songContent").value = song.content;
+
 }
 
 function newSong(){
-    document.getElementById("songTitle").value = "";
+
+    currentSong = null;
+
+    document.getElementById("songName").value = "";
+
     document.getElementById("songContent").value = "";
+
+}
+
+function deleteSong(){
+
+    if(!currentSong){
+        alert("No hay canción seleccionada");
+        return;
+    }
+
+    if(!confirm("¿Borrar canción?")) return;
+
+    songs = songs.filter(s => s.id !== currentSong);
+
+    localStorage.setItem(
+        "cancioneroSongs",
+        JSON.stringify(songs)
+    );
+
+    newSong();
+
+    renderSongs();
+
 }
 
 function transpose(step){
-    alert("La transposición la arreglamos después. Ahorita dejamos seguro el guardado 🎸");
+
+    let content = document.getElementById("songContent").value;
+
+    notes.forEach((note,index)=>{
+
+        const regex = new RegExp(
+            `\\b${note}\\b`,
+            "g"
+        );
+
+        const newNote =
+            notes[(index + step + notes.length) % notes.length];
+
+        content = content.replace(regex,newNote);
+
+    });
+
+    document.getElementById("songContent").value = content;
+
 }
 
-let teleprompter = false;
-let scrollInterval = null;
+function openPrompter(){
 
-function toggleTeleprompter(){
-    const textarea = document.getElementById("songContent");
+    const content =
+        document.getElementById("songContent").value;
 
-    teleprompter = !teleprompter;
-    textarea.classList.toggle("teleprompter");
+    document.getElementById("prompterContent")
+        .textContent = content;
 
-    if(teleprompter){
-        scrollInterval = setInterval(()=>{
-            textarea.scrollTop += 1;
-        },80);
-    }else{
-        clearInterval(scrollInterval);
-    }
+    document.getElementById("teleprompter")
+        .style.display = "block";
+
 }
+
+function closePrompter(){
+
+    document.getElementById("teleprompter")
+        .style.display = "none";
+
+}
+
+document
+.getElementById("searchInput")
+.addEventListener("input",renderSongs);
 
 renderSongs();
+
 </script>
 
 </body>
