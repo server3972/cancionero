@@ -1,503 +1,533 @@
-# Cancionero Pro Remastered 🎸💚
-
-Reemplaza TODO tu `index.html` con este código.
-
-```html
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cancionero Pro Remastered</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cancionero Pro</title>
+  <style>
+    :root {
+      --bg: #07110d;
+      --panel: #0f1f18;
+      --panel2: #12291f;
+      --green: #31f58c;
+      --green2: #92ffbf;
+      --blue: #2f80ed;
+      --red: #ff5f6d;
+      --yellow: #ffd166;
+      --text: #eafff1;
+      --muted: #9dbca8;
+      --border: rgba(49, 245, 140, .25);
+      --shadow: 0 20px 60px rgba(0,0,0,.35);
+    }
 
-<style>
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-}
+    * { box-sizing: border-box; }
 
-body{
-    font-family: Arial, Helvetica, sans-serif;
-    background:#040404;
-    color:#39ff88;
-    overflow:hidden;
-}
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #143426 0%, var(--bg) 48%, #020403 100%);
+      color: var(--text);
+      min-height: 100vh;
+    }
 
-.container{
-    display:flex;
-    height:100vh;
-}
+    header {
+      padding: 18px 14px 10px;
+      text-align: center;
+    }
 
-/* SIDEBAR */
+    header h1 {
+      margin: 0;
+      font-size: clamp(1.6rem, 5vw, 2.6rem);
+      color: var(--green);
+      text-shadow: 0 0 18px rgba(49,245,140,.35);
+    }
 
-.sidebar{
-    width:320px;
-    background:#081108;
-    border-right:2px solid #16a34a;
-    display:flex;
-    flex-direction:column;
-}
+    header p {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: .95rem;
+    }
 
-.logo{
-    padding:20px;
-    text-align:center;
-    font-size:30px;
-    font-weight:bold;
-    color:#7dffb1;
-    border-bottom:1px solid #14532d;
-    text-shadow:0 0 12px #39ff88;
-}
+    .app {
+      width: min(1150px, 96vw);
+      margin: 0 auto 40px;
+      display: grid;
+      grid-template-columns: 330px 1fr;
+      gap: 14px;
+    }
 
-.search{
-    padding:15px;
-}
+    .card {
+      background: linear-gradient(180deg, rgba(18,41,31,.96), rgba(9,22,16,.96));
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+      padding: 14px;
+    }
 
-.search input{
-    width:100%;
-    padding:14px;
-    border-radius:12px;
-    border:1px solid #1f8f4d;
-    background:#021402;
-    color:#7dffb1;
-    font-size:16px;
-    outline:none;
-}
+    label {
+      display: block;
+      margin: 10px 0 5px;
+      color: var(--green2);
+      font-weight: 700;
+      font-size: .9rem;
+    }
 
-.song-list{
-    flex:1;
-    overflow-y:auto;
-    padding:10px;
-}
+    input, textarea, select {
+      width: 100%;
+      border: 1px solid rgba(146,255,191,.24);
+      background: rgba(0,0,0,.35);
+      color: var(--text);
+      border-radius: 12px;
+      padding: 10px;
+      font: inherit;
+      outline: none;
+    }
 
-.song-item{
-    background:#0c1c12;
-    border:1px solid #14532d;
-    border-radius:14px;
-    padding:14px;
-    margin-bottom:12px;
-    cursor:pointer;
-    transition:0.2s;
-}
+    textarea {
+      min-height: 64vh;
+      resize: vertical;
+      line-height: 1.55;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      font-size: 16px;
+      white-space: pre;
+    }
 
-.song-item:hover{
-    transform:scale(1.02);
-    background:#12311d;
-    box-shadow:0 0 12px #16a34a;
-}
+    input:focus, textarea:focus, select:focus {
+      border-color: var(--green);
+      box-shadow: 0 0 0 3px rgba(49,245,140,.13);
+    }
 
-.song-title{
-    font-size:18px;
-    font-weight:bold;
-    color:#b7ffd3;
-}
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
 
-.song-tone{
-    margin-top:6px;
-    color:#5dff9d;
-}
+    .buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 12px;
+    }
 
-/* MAIN */
+    button {
+      border: 0;
+      border-radius: 12px;
+      padding: 10px 12px;
+      font-weight: 800;
+      cursor: pointer;
+      color: #031008;
+      background: var(--green);
+      box-shadow: 0 8px 22px rgba(0,0,0,.28);
+      transition: transform .08s ease, filter .12s ease;
+    }
 
-.main{
-    flex:1;
-    display:flex;
-    flex-direction:column;
-}
+    button:hover { filter: brightness(1.08); }
+    button:active { transform: translateY(1px) scale(.99); }
 
-.topbar{
-    background:#081108;
-    border-bottom:2px solid #14532d;
-    padding:15px;
-    display:flex;
-    flex-wrap:wrap;
-    gap:10px;
-}
+    .blue { background: var(--blue); color: #fff; }
+    .red { background: var(--red); color: #fff; }
+    .yellow { background: var(--yellow); color: #1a1200; }
+    .dark { background: #22342b; color: var(--text); border: 1px solid rgba(146,255,191,.18); }
+    .wide { grid-column: 1 / -1; }
 
-button{
-    background:#16a34a;
-    color:white;
-    border:none;
-    border-radius:12px;
-    padding:12px 18px;
-    cursor:pointer;
-    font-weight:bold;
-    transition:0.2s;
-}
+    .song-list {
+      margin-top: 12px;
+      max-height: 260px;
+      overflow: auto;
+      display: grid;
+      gap: 7px;
+    }
 
-button:hover{
-    background:#22c55e;
-    transform:translateY(-1px);
-}
+    .song-item {
+      padding: 9px 10px;
+      border: 1px solid rgba(146,255,191,.16);
+      border-radius: 12px;
+      background: rgba(0,0,0,.22);
+      color: var(--text);
+      cursor: pointer;
+      font-weight: 650;
+    }
 
-.editor{
-    flex:1;
-    padding:20px;
-    overflow:auto;
-}
+    .song-item:hover {
+      border-color: var(--green);
+      color: var(--green2);
+    }
 
-.song-info{
-    display:grid;
-    grid-template-columns:2fr 2fr 1fr;
-    gap:10px;
-    margin-bottom:15px;
-}
+    .status {
+      min-height: 24px;
+      color: var(--yellow);
+      font-weight: 750;
+      margin-top: 10px;
+      font-size: .9rem;
+    }
 
-.song-info input{
-    padding:14px;
-    border-radius:12px;
-    border:1px solid #14532d;
-    background:#021402;
-    color:#7dffb1;
-    font-size:18px;
-    outline:none;
-}
+    .editor-head {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      align-items: end;
+      margin-bottom: 10px;
+    }
 
-textarea{
-    width:100%;
-    height:72vh;
-    resize:none;
-    border-radius:14px;
-    border:2px solid #1f8f4d;
-    background:#021402;
-    color:#8dffbd;
-    padding:25px;
-    font-size:24px;
-    line-height:1.9;
-    font-family:Consolas, monospace;
-    outline:none;
-    text-shadow:0 0 6px #39ff88;
-}
+    .tonebox {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
 
-/* TELEPROMPTER */
+    .tele {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      background: #020403;
+      color: var(--green2);
+      display: none;
+      flex-direction: column;
+      padding: 18px;
+    }
 
-.teleprompter{
-    position:fixed;
-    inset:0;
-    background:black;
-    color:#7dffb1;
-    display:none;
-    z-index:999;
-    overflow:auto;
-    padding:80px;
-    white-space:pre-wrap;
-    font-size:48px;
-    line-height:2.2;
-    text-shadow:0 0 10px #39ff88;
-}
+    .tele.active { display: flex; }
 
-.prompter-controls{
-    position:fixed;
-    top:15px;
-    right:15px;
-    display:flex;
-    gap:10px;
-    z-index:1000;
-}
+    .tele-bar {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(49,245,140,.18);
+    }
 
-/* RESPONSIVE */
+    .tele-title {
+      color: var(--green);
+      font-weight: 900;
+      margin-right: 10px;
+    }
 
-@media(max-width:900px){
+    .tele-content {
+      flex: 1;
+      overflow: auto;
+      white-space: pre-wrap;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: clamp(24px, 4.5vw, 54px);
+      line-height: 1.55;
+      padding: 26px 8vw 60vh;
+      text-align: left;
+    }
 
-.container{
-    flex-direction:column;
-}
+    .smallnote {
+      color: var(--muted);
+      font-size: .82rem;
+      line-height: 1.35;
+      margin-top: 8px;
+    }
 
-.sidebar{
-    width:100%;
-    height:260px;
-}
-
-.song-info{
-    grid-template-columns:1fr;
-}
-
-textarea{
-    height:55vh;
-    font-size:18px;
-}
-
-.topbar{
-    justify-content:center;
-}
-
-}
-</style>
+    @media (max-width: 820px) {
+      .app { grid-template-columns: 1fr; }
+      textarea { min-height: 58vh; font-size: 15px; }
+      .editor-head { grid-template-columns: 1fr; }
+      .tonebox { justify-content: stretch; }
+      .tonebox button { flex: 1 1 135px; }
+    }
+  </style>
 </head>
-
 <body>
-
-<div class="container">
-
-<div class="sidebar">
-
-<div class="logo">
-🎸 Cancionero Pro
-</div>
-
-<div class="search">
-<input type="text" id="searchInput" placeholder="Buscar canción...">
-</div>
-
-<div class="song-list" id="songList"></div>
-
-</div>
-
-<div class="main">
-
-<div class="topbar">
-
-<button onclick="newSong()">Nueva</button>
-<button onclick="saveSong()">Guardar</button>
-<button onclick="deleteSong()">Borrar</button>
-<button onclick="transpose(1)">⬆ Medio tono</button>
-<button onclick="transpose(-1)">⬇ Medio tono</button>
-<button onclick="transpose(2)">⬆ Tono</button>
-<button onclick="transpose(-2)">⬇ Tono</button>
-<button onclick="openPrompter()">🎤 Teleprompter</button>
-
-</div>
-
-<div class="editor">
-
-<div class="song-info">
-<input type="text" id="songTitle" placeholder="Título de la canción">
-<input type="text" id="songArtist" placeholder="Artista">
-<input type="text" id="songTone" placeholder="Tono">
-</div>
-
-<textarea id="songContent" placeholder="Pega aquí letra y acordes..."></textarea>
-
-</div>
-
-</div>
-
-</div>
-
-<!-- TELEPROMPTER -->
-
-<div class="teleprompter" id="teleprompter">
-
-<div class="prompter-controls">
-<button onclick="startScroll()">▶ Play</button>
-<button onclick="stopScroll()">⏸ Stop</button>
-<button onclick="speedUp()">⚡ +</button>
-<button onclick="speedDown()">🐢 -</button>
-<button onclick="closePrompter()">❌ Cerrar</button>
-</div>
-
-<div id="prompterContent"></div>
-
-</div>
-
-<script>
-
-let songs = JSON.parse(localStorage.getItem("cancioneroSongs")) || [];
-let currentSong = null;
-let scrollInterval = null;
-let scrollSpeed = 1;
-
-const notes = [
-"C","C#","D","D#","E","F",
-"F#","G","G#","A","A#","B"
-];
-
-function renderSongs(){
-
-const songList = document.getElementById("songList");
-songList.innerHTML = "";
-
-const search = document
-.getElementById("searchInput")
-.value
-.toLowerCase();
-
-songs
-.filter(song => song.title.toLowerCase().includes(search))
-.forEach(song => {
-
-const div = document.createElement("div");
-
-    div.className = "song-item";
-
-    div.innerHTML = `
-        <div class="song-title">${song.title}</div>
-        <div class="song-tone">🎵 ${song.artist || "Canción guardada"}</div>
-    `;
-
-    div.onclick = () => loadSong(song.id);
-
-    songList.appendChild(div);
-
-});
-
-}
-
-function saveSong(){
-
-const title = document.getElementById("songTitle").value.trim();
-const artist = document.getElementById("songArtist").value.trim();
-const tone = document.getElementById("songTone").value.trim();
-const content = document.getElementById("songContent").value;
-
-if(!title){
-alert("Pon título a la canción 🎸");
-return;
-}
-
-if(currentSong){
-
-const song = songs.find(s => s.id === currentSong);
-
-song.title = title;
-song.artist = artist;
-song.tone = tone;
-song.content = content;
-
-}else{
-
-songs.push({
-id:Date.now(),
-title,
-artist,
-tone,
-content
-});
-
-}
-
-localStorage.setItem(
-"cancioneroSongs",
-JSON.stringify(songs)
-);
-
-renderSongs();
-
-alert("Canción guardada 🎸");
-
-}
-
-function loadSong(id){
-
-const song = songs.find(s => s.id === id);
-if(!song) return;
-
-currentSong = id;
-
-document.getElementById("songTitle").value = song.title || "";
-document.getElementById("songArtist").value = song.artist || "";
-document.getElementById("songTone").value = song.tone || "";
-document.getElementById("songContent").value = song.content || "";
-
-}
-
-function newSong(){
-
-currentSong = null;
-
-document.getElementById("songTitle").value = "";
-document.getElementById("songArtist").value = "";
-document.getElementById("songTone").value = "";
-document.getElementById("songContent").value = "";
-
-}
-
-function deleteSong(){
-
-if(!currentSong){
-alert("No hay canción seleccionada");
-return;
-}
-
-if(!confirm("¿Borrar canción?")) return;
-
-songs = songs.filter(s => s.id !== currentSong);
-
-localStorage.setItem(
-"cancioneroSongs",
-JSON.stringify(songs)
-);
-
-newSong();
-renderSongs();
-
-}
-
-function transpose(step){
-
-let content = document.getElementById("songContent").value;
-
-notes.forEach((note,index)=>{
-
-const regex = new RegExp(`\\b${note}(?![a-zA-Z#])\\b`,"g");
-
-const newNote = notes[
-(index + step + notes.length) % notes.length
-];
-
-content = content.replace(regex,newNote);
-
-});
-
-document.getElementById("songContent").value = content;
-
-}
-
-function openPrompter(){
-
-const content = document.getElementById("songContent").value;
-
-document.getElementById("prompterContent")
-.textContent = content;
-
-document.getElementById("teleprompter")
-.style.display = "block";
-
-}
-
-function closePrompter(){
-
-stopScroll();
-
-document.getElementById("teleprompter")
-.style.display = "none";
-
-}
-
-function startScroll(){
-
-stopScroll();
-
-const teleprompter = document.getElementById("teleprompter");
-
-scrollInterval = setInterval(()=>{
-teleprompter.scrollTop += scrollSpeed;
-},30);
-
-}
-
-function stopScroll(){
-clearInterval(scrollInterval);
-}
-
-function speedUp(){
-scrollSpeed += 0.5;
-}
-
-function speedDown(){
-if(scrollSpeed > 0.5){
-scrollSpeed -= 0.5;
-}
-}
-
-document
-.getElementById("searchInput")
-.addEventListener("input",renderSongs);
-
-renderSongs();
-
-</script>
-
+  <header>
+    <h1>🎸 Cancionero Pro</h1>
+    <p>Guarda rolas, transpón tonos y usa teleprompter — versión limpia y estable.</p>
+  </header>
+
+  <main class="app">
+    <section class="card">
+      <label for="songTitle">Nombre de la rola</label>
+      <input id="songTitle" placeholder="Ej. Te Metiste" />
+
+      <label for="songKey">Tono base</label>
+      <select id="songKey">
+        <option value="C">C</option><option value="C#">C# / Db</option><option value="D">D</option><option value="D#">D# / Eb</option>
+        <option value="E">E</option><option value="F">F</option><option value="F#">F# / Gb</option><option value="G">G</option>
+        <option value="G#">G# / Ab</option><option value="A">A</option><option value="A#">A# / Bb</option><option value="B">B</option>
+      </select>
+
+      <div class="buttons">
+        <button onclick="newSong()">✨ Nueva</button>
+        <button onclick="saveSong()">💾 Guardar</button>
+        <button class="red" onclick="deleteSong()">🗑️ Borrar</button>
+        <button class="yellow" onclick="downloadBackup()">📦 Backup</button>
+        <button class="blue" onclick="searchLaCuerda()">🌎 La Cuerda</button>
+        <button class="blue" onclick="searchUltimate()">🌎 Ultimate</button>
+        <button class="dark wide" onclick="renderSongList()">🔄 Actualizar lista</button>
+      </div>
+
+      <label>Canciones guardadas</label>
+      <div id="songList" class="song-list"></div>
+      <div id="status" class="status"></div>
+      <p class="smallnote">Tip: escribe la rola y dale Guardar. Todo se guarda en este navegador/dispositivo con localStorage.</p>
+    </section>
+
+    <section class="card">
+      <div class="editor-head">
+        <div>
+          <label for="songBody">Letra con acordes</label>
+        </div>
+        <div class="tonebox">
+          <button onclick="transposeSong(1)">⬆ Medio tono</button>
+          <button onclick="transposeSong(-1)">⬇ Medio tono</button>
+          <button onclick="transposeSong(2)">⬆ Tono</button>
+          <button onclick="transposeSong(-2)">⬇ Tono</button>
+          <button class="blue" onclick="openTeleprompter()">🎤 Teleprompter</button>
+        </div>
+      </div>
+      <textarea id="songBody" spellcheck="false" placeholder="Pega aquí tu rola con acordes..."></textarea>
+    </section>
+  </main>
+
+  <section id="tele" class="tele">
+    <div class="tele-bar">
+      <span id="teleTitle" class="tele-title">🎤 Teleprompter</span>
+      <button onclick="playTele()">▶ Play</button>
+      <button onclick="stopTele()">⏸ Stop</button>
+      <button onclick="speedUp()">⚡ +</button>
+      <button onclick="speedDown()">🐢 -</button>
+      <button class="red" onclick="closeTeleprompter()">❌ Cerrar</button>
+    </div>
+    <div id="teleContent" class="tele-content"></div>
+  </section>
+
+  <script>
+    const titleEl = document.getElementById('songTitle');
+    const keyEl = document.getElementById('songKey');
+    const bodyEl = document.getElementById('songBody');
+    const statusEl = document.getElementById('status');
+    const listEl = document.getElementById('songList');
+    const tele = document.getElementById('tele');
+    const teleContent = document.getElementById('teleContent');
+    const teleTitle = document.getElementById('teleTitle');
+
+    const STORAGE_KEY = 'cancionero_pro_v2_songs';
+    let currentId = null;
+    let teleTimer = null;
+    let teleSpeed = 1.2;
+
+    const sharpNotes = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
+    const flatToSharp = {
+      'Db':'C#','Eb':'D#','Gb':'F#','Ab':'G#','Bb':'A#',
+      'Cb':'B','Fb':'E','E#':'F','B#':'C'
+    };
+
+    function showStatus(msg) {
+      statusEl.textContent = msg;
+      setTimeout(() => {
+        if (statusEl.textContent === msg) statusEl.textContent = '';
+      }, 2800);
+    }
+
+    function getSongs() {
+      try {
+        return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function setSongs(songs) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(songs));
+    }
+
+    function makeId() {
+      return 'song_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7);
+    }
+
+    function newSong() {
+      currentId = null;
+      titleEl.value = '';
+      keyEl.value = 'C';
+      bodyEl.value = '';
+      titleEl.focus();
+      showStatus('Lista una rola nueva ✨');
+    }
+
+    function saveSong() {
+      const title = titleEl.value.trim();
+      const body = bodyEl.value;
+      const key = keyEl.value;
+
+      if (!title) {
+        showStatus('Ponle nombre a la rola primero, my friend 🎵');
+        titleEl.focus();
+        return;
+      }
+
+      const songs = getSongs();
+      const now = new Date().toISOString();
+
+      if (!currentId) {
+        currentId = makeId();
+        songs.unshift({ id: currentId, title, key, body, createdAt: now, updatedAt: now });
+      } else {
+        const idx = songs.findIndex(s => s.id === currentId);
+        if (idx >= 0) songs[idx] = { ...songs[idx], title, key, body, updatedAt: now };
+        else songs.unshift({ id: currentId, title, key, body, createdAt: now, updatedAt: now });
+      }
+
+      setSongs(songs);
+      renderSongList();
+      showStatus('Guardada al chingazo 💾🎸');
+    }
+
+    function loadSong(id) {
+      const song = getSongs().find(s => s.id === id);
+      if (!song) return;
+      currentId = song.id;
+      titleEl.value = song.title || '';
+      keyEl.value = normalizeRoot(song.key || 'C');
+      bodyEl.value = song.body || '';
+      showStatus('Rola abierta 📂');
+    }
+
+    function deleteSong() {
+      if (!currentId) {
+        showStatus('No hay rola abierta para borrar');
+        return;
+      }
+      const title = titleEl.value.trim() || 'esta rola';
+      const ok = confirm('¿Borrar "' + title + '"?');
+      if (!ok) return;
+      const songs = getSongs().filter(s => s.id !== currentId);
+      setSongs(songs);
+      newSong();
+      renderSongList();
+      showStatus('Rola borrada 🗑️');
+    }
+
+    function renderSongList() {
+      const songs = getSongs();
+      listEl.innerHTML = '';
+      if (!songs.length) {
+        listEl.innerHTML = '<div class="smallnote">Todavía no hay canciones guardadas.</div>';
+        return;
+      }
+      songs.forEach(song => {
+        const item = document.createElement('div');
+        item.className = 'song-item';
+        item.textContent = '🎵 ' + song.title + '  ·  ' + (song.key || 'C');
+        item.onclick = () => loadSong(song.id);
+        listEl.appendChild(item);
+      });
+    }
+
+    function normalizeRoot(root) {
+      if (!root) return root;
+      root = root.replace('♯', '#').replace('♭', 'b');
+      return flatToSharp[root] || root;
+    }
+
+    function transposeRoot(root, steps) {
+      const clean = normalizeRoot(root);
+      const idx = sharpNotes.indexOf(clean);
+      if (idx === -1) return root;
+      const next = (idx + steps + 1200) % 12;
+      return sharpNotes[next];
+    }
+
+    function transposeChord(chord, steps) {
+      const match = chord.match(/^([A-G](?:#|b)?)(.*)$/);
+      if (!match) return chord;
+      return transposeRoot(match[1], steps) + match[2];
+    }
+
+    function transposeSong(steps) {
+      const text = bodyEl.value;
+      if (!text.trim()) {
+        showStatus('Pega una rola primero 🎸');
+        return;
+      }
+
+      // Detecta acordes tipo: A, Bb, C#, F#m, G7, D/F#, Asus4, Bm7b5, etc.
+      const chordRegex = /\b([A-G](?:#|b)?(?:m|maj|min|dim|aug|sus|add)?\d*(?:[#b]?\d*)?(?:\/[A-G](?:#|b)?)?)\b/g;
+
+      bodyEl.value = text.replace(chordRegex, (full) => {
+        // Evita cambiar palabras comunes de una sola letra dentro de texto cuando sea demasiado dudoso.
+        // En letras con acordes reales sí cambia A-G. Esta es la forma práctica para cancionero.
+        if (full.includes('/')) {
+          const parts = full.split('/');
+          return transposeChord(parts[0], steps) + '/' + transposeRoot(parts[1], steps);
+        }
+        return transposeChord(full, steps);
+      });
+
+      keyEl.value = transposeRoot(keyEl.value, steps);
+      showStatus(steps > 0 ? 'Tono subido 🎼' : 'Tono bajado 🎼');
+    }
+
+    function searchLaCuerda() {
+      const q = encodeURIComponent(titleEl.value.trim());
+      if (!q) return showStatus('Pon el nombre de la rola para buscar 🔎');
+      window.open('https://www.google.com/search?q=site%3Alacuerda.net+' + q, '_blank');
+    }
+
+    function searchUltimate() {
+      const q = encodeURIComponent(titleEl.value.trim());
+      if (!q) return showStatus('Pon el nombre de la rola para buscar 🔎');
+      window.open('https://www.google.com/search?q=site%3Aultimate-guitar.com+' + q + '+chords', '_blank');
+    }
+
+    function openTeleprompter() {
+      teleTitle.textContent = '🎤 ' + (titleEl.value.trim() || 'Teleprompter');
+      teleContent.textContent = bodyEl.value || 'Pega una rola primero, my friend 🎸';
+      teleContent.scrollTop = 0;
+      tele.classList.add('active');
+    }
+
+    function closeTeleprompter() {
+      stopTele();
+      tele.classList.remove('active');
+    }
+
+    function playTele() {
+      stopTele();
+      teleTimer = setInterval(() => {
+        teleContent.scrollTop += teleSpeed;
+      }, 40);
+    }
+
+    function stopTele() {
+      if (teleTimer) clearInterval(teleTimer);
+      teleTimer = null;
+    }
+
+    function speedUp() {
+      teleSpeed = Math.min(8, teleSpeed + .4);
+      showStatus('Teleprompter más rápido ⚡');
+    }
+
+    function speedDown() {
+      teleSpeed = Math.max(.2, teleSpeed - .4);
+      showStatus('Teleprompter más lento 🐢');
+    }
+
+    function downloadBackup() {
+      const songs = getSongs();
+      const blob = new Blob([JSON.stringify(songs, null, 2)], { type: 'application/json' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'backup-cancionero.json';
+      a.click();
+      URL.revokeObjectURL(a.href);
+      showStatus('Backup descargado 📦');
+    }
+
+    window.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's') {
+        e.preventDefault();
+        saveSong();
+      }
+      if (e.key === 'Escape' && tele.classList.contains('active')) closeTeleprompter();
+    });
+
+    renderSongList();
+  </script>
 </body>
 </html>
-```
