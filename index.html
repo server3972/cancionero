@@ -1,98 +1,131 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cancionero Pro V3</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Cancionero Pro V4</title>
 
 <style>
 :root{
-  --bg:#050806;
-  --panel:#0d1712;
-  --panel2:#112019;
+  --bg:#020403;
+  --bg2:#07110d;
+  --panel:#0b1510;
+  --panel2:#101f18;
   --green:#32ff96;
   --green2:#a5ffc8;
   --blue:#3498ff;
   --yellow:#ffd166;
   --red:#ff5f6d;
+  --purple:#b983ff;
   --text:#eafff1;
-  --muted:#87a494;
-  --border:rgba(50,255,150,.16);
+  --muted:#8caf9b;
+  --border:rgba(50,255,150,.20);
+  --shadow:0 24px 70px rgba(0,0,0,.45);
 }
 
-*{
-  box-sizing:border-box;
-}
-  body{
+*{box-sizing:border-box}
+
+body{
   margin:0;
-  background:
-    radial-gradient(circle at top,#153427 0%,#07110d 35%,#020403 100%);
   color:var(--text);
   font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
   min-height:100vh;
+  background:
+    radial-gradient(circle at top left,rgba(50,255,150,.18),transparent 35%),
+    radial-gradient(circle at top right,rgba(52,152,255,.12),transparent 35%),
+    linear-gradient(160deg,#020403,#06100c 45%,#010201);
 }
 
 header{
-  padding:18px;
+  padding:18px 12px 12px;
   text-align:center;
 }
 
 header h1{
   margin:0;
   color:var(--green);
-  font-size:clamp(2rem,4vw,3.3rem);
-  text-shadow:0 0 22px rgba(50,255,150,.35);
+  font-size:clamp(2rem,5vw,3.5rem);
+  letter-spacing:.5px;
+  text-shadow:0 0 22px rgba(50,255,150,.40);
 }
 
 header p{
   color:var(--muted);
-  margin-top:8px;
+  margin:8px 0 0;
+}
+
+.terminal-line{
+  color:var(--green2);
+  font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;
+  font-size:.95rem;
+  opacity:.92;
 }
 
 .app{
-  width:min(1800px,99vw);
-  margin:auto;
+  width:min(1850px,99vw);
+  margin:0 auto 28px;
   display:grid;
-  grid-template-columns:220px 1fr;
+  grid-template-columns:300px 1fr;
   gap:16px;
-    box-shadow:0 25px 60px rgba(0,0,0,.35);
+  padding:10px;
+}
+
+.card{
+  background:linear-gradient(180deg,rgba(16,31,24,.96),rgba(7,17,13,.96));
+  border:1px solid var(--border);
+  border-radius:22px;
+  padding:16px;
+  box-shadow:var(--shadow);
 }
 
 label{
   display:block;
   margin:12px 0 6px;
   color:var(--green2);
-  font-weight:700;
+  font-weight:800;
 }
 
 input,textarea,select{
   width:100%;
-  border-radius:14px;
-  border:1px solid rgba(255,255,255,.08);
-  background:rgba(0,0,0,.35);
+  border-radius:15px;
+  border:1px solid rgba(255,255,255,.09);
+  background:rgba(0,0,0,.38);
   color:var(--text);
   padding:12px;
   font:inherit;
   outline:none;
 }
 
-input:focus,
-textarea:focus,
-select:focus{
-  border-color:var(--green);
-  box-shadow:0 0 0 3px rgba(50,255,150,.12);
-}
-    box-shadow:0 25px 60px rgba(0,0,0,.35);
+textarea{
+  min-height:78vh;
+  resize:vertical;
+  line-height:1.55;
+  font-size:20px;
+  font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;
 }
 
-label{
-  display:block;
-  margin:12px 0 6px;
-  color:var(--green2);
-        cursor:pointer;
+input:focus,textarea:focus,select:focus{
+  border-color:var(--green);
+  box-shadow:0 0 0 3px rgba(50,255,150,.13);
+}
+
+.buttons{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+  margin-top:14px;
+}
+
+button{
+  border:0;
+  border-radius:14px;
+  padding:11px 12px;
+  font-weight:900;
+  cursor:pointer;
   transition:.12s;
   background:var(--green);
   color:#021108;
+  box-shadow:0 8px 20px rgba(0,0,0,.18);
 }
 
 button:hover{
@@ -100,62 +133,52 @@ button:hover{
   filter:brightness(1.08);
 }
 
-.blue{
-  background:var(--blue);
-  color:white;
+button:active{
+  transform:translateY(0);
 }
 
-.red{
-  background:var(--red);
-  color:white;
+.blue{background:var(--blue);color:white}
+.red{background:var(--red);color:white}
+.yellow{background:var(--yellow);color:#241600}
+.purple{background:var(--purple);color:#16051f}
+.dark{background:#1b2b22;color:white}
+.wide{grid-column:1/-1}
+
+.category-grid{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:8px;
+  margin:12px 0;
 }
 
-.yellow{
-  background:var(--yellow);
-  color:#241600;
+.cat-btn{
+  text-align:left;
+  background:#0a2117;
+  color:var(--green2);
+  border:1px solid rgba(50,255,150,.16);
 }
 
-.dark{
-  background:#1b2b22;
-  color:white;
-}
-  font-weight:700;
+.cat-btn.active{
+  background:var(--green);
+  color:#021108;
 }
 
-input,textarea,select{
-  width:100%;
-  border-radius:14px;
-  border:1px solid rgba(255,255,255,.08);
-  background:rgba(0,0,0,.35);
-  color:var(--text);
-  padding:12px;
-  font:inherit;
-  outline:none;
-}
-
-input:focus,
-textarea:focus,
-select:focus{
-  border-color:var(--green);
-  box-shadow:0 0 0 3px rgba(50,255,150,.12);
-}
-  .wide{
-  grid-column:1/-1;
-}
+.searchbox{margin-top:10px}
 
 .song-list{
   margin-top:12px;
-  max-height:55vh;
+  max-height:43vh;
   overflow:auto;
   display:grid;
   gap:8px;
+  padding-right:3px;
 }
 
 .song-item{
-  padding:10px;
-  border-radius:14px;
-  background:rgba(0,0,0,.25);
-  border:1px solid rgba(255,255,255,.05);
+  padding:11px;
+  border-radius:15px;
+  background:rgba(0,0,0,.28);
+  border:1px solid rgba(255,255,255,.06);
   cursor:pointer;
   transition:.12s;
 }
@@ -165,13 +188,28 @@ select:focus{
   color:var(--green2);
 }
 
+.song-item.active{
+  border-color:var(--green);
+  background:rgba(50,255,150,.10);
+}
+
+.song-title{
+  font-weight:900;
+}
+
+.song-meta{
+  font-size:.82rem;
+  color:var(--muted);
+  margin-top:4px;
+}
+
 .status{
   margin-top:12px;
   min-height:26px;
   color:var(--yellow);
-  font-weight:800;
+  font-weight:900;
 }
-  
+
 .editor-head{
   display:grid;
   grid-template-columns:1fr auto;
@@ -187,195 +225,226 @@ select:focus{
   justify-content:flex-end;
 }
 
-.searchbox{
-  margin-top:10px;
+.quick-links{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:8px;
+  margin:10px 0 14px;
+}
+
+.smallnote{
+  color:var(--muted);
+  font-size:.86rem;
+  line-height:1.45;
 }
 
 .tele{
   position:fixed;
   inset:0;
-  background:black;
+  background:#000;
   z-index:9999;
   display:none;
   flex-direction:column;
 }
 
-.tele.active{
-  display:flex;
-}
-  
+.tele.active{display:flex}
+
 .tele-bar{
   padding:12px;
   display:flex;
   gap:10px;
   flex-wrap:wrap;
   justify-content:center;
-  border-bottom:1px solid rgba(50,255,150,.12);
+  border-bottom:1px solid rgba(50,255,150,.16);
   background:#020403;
 }
 
 .tele-content{
   flex:1;
   overflow:auto;
-  padding:40px 10vw 70vh;
+  padding:40px 8vw 75vh;
   white-space:pre-wrap;
   line-height:1.8;
-  font-size:clamp(30px,4vw,58px);
+  font-size:clamp(30px,4.3vw,62px);
   color:var(--green2);
-  font-family:
-    ui-monospace,
-    SFMono-Regular,
-    Menlo,
-    Monaco,
-    Consolas,
-    monospace;
+  font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;
 }
 
-.smallnote{
-    color:var(--muted);
-  font-size:.86rem;
-  line-height:1.4;
+.hidden-file{display:none}
+
+.footer{
+  text-align:center;
+  color:var(--muted);
+  padding:0 0 20px;
 }
 
-@media(max-width:900px){
-  .app{
-    grid-template-columns:1fr;
-  }
+@media(max-width:1000px){
+  .app{grid-template-columns:1fr}
+  textarea{min-height:72vh;font-size:22px}
+  .editor-head{grid-template-columns:1fr}
+  .tonebox{justify-content:stretch}
+  .tonebox button{flex:1 1 130px}
+  .quick-links{grid-template-columns:1fr 1fr}
+}
 
-  textarea{
-    min-height:88vh;
-    font-size:24px;
-  }
-
-  .editor-head{
-    grid-template-columns:1fr;
-  }
-
-  .tonebox{
-    justify-content:stretch;
-  }
-
-  .tonebox button{
-    flex:1 1 130px;
-  }
+@media(max-width:520px){
+  .app{width:100vw;padding:6px}
+  .card{border-radius:16px;padding:12px}
+  .buttons{grid-template-columns:1fr}
+  .quick-links{grid-template-columns:1fr}
+  textarea{min-height:68vh;font-size:20px}
 }
 </style>
 </head>
 
 <body>
-
 <header>
-<h1>🎸 Cancionero Pro V3</h1>
-<p>Cyber Norteño Edition · Linux Style · Teleprompter Mode</p>
+  <h1>🎸 Cancionero Pro V4</h1>
+  <p>Cyber Norteño Linux Edition · Carretera · Guitarra · Teleprompter</p>
+  <div class="terminal-line">juan@cancionero:~$ listo_para_tocar --modo=macizo</div>
 </header>
 
 <main class="app">
 
 <section class="card">
+  <label>Nombre de la rola</label>
+  <input id="songTitle" placeholder="Ej. Te Metiste">
 
-<label>Nombre de la rola</label>
-<input id="songTitle" placeholder="Ej. Te Metiste">
+  <label>Tono</label>
+  <select id="songKey">
+    <option>C</option><option>C#</option><option>D</option><option>D#</option>
+    <option>E</option><option>F</option><option>F#</option><option>G</option>
+    <option>G#</option><option>A</option><option>A#</option><option>B</option>
+  </select>
 
-<label>Tono</label>
-<select id="songKey">
-<option>C</option>
-<option>C#</option>
-<option>D</option>
-<option>D#</option>
-<option>E</option>
-<option>F</option>
-<option>F#</option>
-<option>G</option>
-<option>G#</option>
-<option>A</option>
-<option>A#</option>
-<option>B</option>
-</select>
+  <label>Categoría</label>
+  <select id="songCategory">
+    <option>Campirano</option>
+    <option>Rock</option>
+    <option>Baladas</option>
+    <option>Cristianas</option>
+    <option>Favoritas</option>
+    <option>Otra</option>
+  </select>
 
-<div class="buttons">
-<button onclick="newSong()">✨ Nueva</button>
-<button onclick="saveSon()">✨ Nueva</button>
-<button onclick="saveSong()">💾 Guardar</button>
-<button class="red" onclick="deleteSong()">🗑️ Borrar</button>
-<button class="yellow" onclick="downloadBackup()">📦 Backup</button>
-<button class="blue" onclick="searchLaCuerda()">🌎 La Cuerda</button>
-<button class="blue" onclick="searchUltimate()">🌎 Ultimate</button>
-<button class="dark wide" onclick="renderSongList()">🔄 Actualizar</button>
-</div>
+  <div class="buttons">
+    <button onclick="newSong()">✨ Nueva</button>
+    <button onclick="saveSong()">💾 Guardar</button>
+    <button class="red" onclick="deleteSong()">🗑️ Borrar</button>
+    <button class="yellow" onclick="downloadBackup()">📦 Exportar</button>
+    <button class="blue" onclick="document.getElementById('importFile').click()">📥 Importar</button>
+    <button class="dark" onclick="renderSongList()">🔄 Actualizar</button>
+  </div>
 
-<div class="searchbox">
-  <label>Buscar canción</label>
-<input id="searchInput" placeholder="Buscar..." oninput="renderSongList()">
-</div>
+  <input id="importFile" class="hidden-file" type="file" accept="application/json,.json" onchange="importBackup(event)">
 
-<label>Canciones guardadas</label>
-<div id="songList" class="song-list"></div>
+  <label>Menú perrón</label>
+  <div class="category-grid">
+    <button class="cat-btn active" data-filter="Todas" onclick="setFilter('Todas')">📚 Todas</button>
+    <button class="cat-btn" data-filter="Campirano" onclick="setFilter('Campirano')">🎸 Campirano</button>
+    <button class="cat-btn" data-filter="Rock" onclick="setFilter('Rock')">⚡ Rock</button>
+    <button class="cat-btn" data-filter="Baladas" onclick="setFilter('Baladas')">💔 Baladas</button>
+    <button class="cat-btn" data-filter="Cristianas" onclick="setFilter('Cristianas')">🙏 Cristianas</button>
+    <button class="cat-btn" data-filter="Favoritas" onclick="setFilter('Favoritas')">⭐ Favoritas</button>
+  </div>
 
-<div id="status" class="status"></div>
+  <div class="searchbox">
+    <label>Buscar canción</label>
+    <input id="searchInput" placeholder="Buscar..." oninput="renderSongList()">
+  </div>
 
-<p class="smallnote">
-Las canciones se guardan automáticamente en este dispositivo.
-Más adelante agregaremos sincronización Linux/server 😎
-</p>
+  <label>Canciones guardadas</label>
+  <div id="songList" class="song-list"></div>
 
+  <div id="status" class="status"></div>
+
+  <p class="smallnote">
+    Guarda en este dispositivo con LocalStorage. Usa Exportar/Importar JSON para mover rolas al Samsung, Pixel, Volla o Linux.
+  </p>
 </section>
 
 <section class="card">
+  <div class="editor-head">
+    <div>
+      <label>Letra con acordes</label>
+      <div class="smallnote">Tip: usa acordes tipo C, G, Am, F#m7, Dsus4, A/C#.</div>
+    </div>
 
-<div class="editor-head">
-<div>
-<label>Letra con acordes</label>
-</div>
-
-<div class="tonebox">
-<button onclick="transposeSong(1)">⬆ Medio</button>
-<button onclick="transposeSong(-1)">⬇ Medio</button>
-<button onclick="transposeSong(2)">⬆ Tono</button>
-<button onclick="transposeSong(-2)">⬇ Tono</button>
-<button class="blue" onclick="openTeleprompter()">🎤 Teleprompter</button>
-</div>
+    <div class="tonebox">
+      <button onclick="transposeSong(1)">⬆ Medio</button>
+      <button onclick="transposeSong(-1)">⬇ Medio</button>
+      <button onclick="transposeSong(2)">⬆ Tono</button>
+      <button onclick="transposeSong(-2)">⬇ Tono</button>
+      <button class="blue" onclick="openTeleprompter()">🎤 Teleprompter</button>
+    </div>
   </div>
 
-<textarea id="songBody" spellcheck="false" placeholder="Pega aquí la rola..."></textarea>
+  <div class="quick-links">
+    <button class="blue" onclick="searchLaCuerda()">🌎 La Cuerda</button>
+    <button class="blue" onclick="searchUltimate()">🎸 Ultimate</button>
+    <button class="red" onclick="searchYouTube()">▶ YouTube</button>
+    <button class="purple" onclick="openMoises()">🎼 Moises</button>
+  </div>
 
+  <textarea id="songBody" spellcheck="false" placeholder="Pega aquí la rola...
+
+Ejemplo:
+G                 D
+Aquí va la letra con acordes
+Em                C
+Y el cancionero se pone macizo 🎸"></textarea>
 </section>
 
 </main>
 
 <section id="tele" class="tele">
-
-<div class="tele-bar">
-<button onclick="playTele()">▶ Play</button>
-<button onclick="stopTele()">⏸ Stop</button>
-<button onclick="speedUp()">⚡ +</button>
-<button onclick="speedDown()">🐢 -</button>
-<button class="red" onclick="closeTeleprompter()">❌ Cerrar</button>
-</div>
-
-<div id="teleContent" class="tele-content"></div>
-
+  <div class="tele-bar">
+    <button onclick="playTele()">▶ Play</button>
+    <button onclick="stopTele()">⏸ Stop</button>
+    <button onclick="speedUp()">⚡ +</button>
+    <button onclick="speedDown()">🐢 -</button>
+    <button onclick="fontUp()">🔎 Letra +</button>
+    <button onclick="fontDown()">🔍 Letra -</button>
+    <button class="red" onclick="closeTeleprompter()">❌ Cerrar</button>
+  </div>
+  <div id="teleContent" class="tele-content"></div>
 </section>
 
+<div class="footer">
+  Hecho para guitarra, carretera y Linux · Cancionero Pro V4
+</div>
+
 <script>
-const STORAGE_KEY='cancionero_pro_v3';
+const STORAGE_KEY='cancionero_pro_v4';
 
 const titleEl=document.getElementById('songTitle');
 const bodyEl=document.getElementById('songBody');
 const keyEl=document.getElementById('songKey');
+const catEl=document.getElementById('songCategory');
 const listEl=document.getElementById('songList');
 const statusEl=document.getElementById('status');
 const tele=document.getElementById('tele');
-  const teleContent=document.getElementById('teleContent');
+const teleContent=document.getElementById('teleContent');
 const searchInput=document.getElementById('searchInput');
 
 let currentId=null;
+let currentFilter='Todas';
 let teleTimer=null;
 let teleSpeed=1.4;
+let teleFont=42;
 
-const notes=['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
+const sharpNotes=['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
+const flatToSharp={
+  'Db':'C#','Eb':'D#','Gb':'F#','Ab':'G#','Bb':'A#',
+  'Cb':'B','Fb':'E','E#':'F','B#':'C'
+};
 
 function getSongs(){
-  return JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]');
+  try{
+    return JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]');
+  }catch(e){
+    return [];
+  }
 }
 
 function setSongs(songs){
@@ -385,36 +454,58 @@ function setSongs(songs){
 function showStatus(msg){
   statusEl.textContent=msg;
   setTimeout(()=>{
-    if(statusEl.textContent===msg){
-      statusEl.textContent='';
-    }
-  },2500);
+    if(statusEl.textContent===msg) statusEl.textContent='';
+  },3000);
 }
 
 function makeId(){
-  return 'song_'+Date.now();
+  return 'song_'+Date.now()+'_'+Math.random().toString(16).slice(2);
+}
+
+function escapeHtml(text){
+  return String(text).replace(/[&<>"']/g, ch => ({
+    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'
+  }[ch]));
+}
+
+function setFilter(filter){
+  currentFilter=filter;
+  document.querySelectorAll('.cat-btn').forEach(btn=>{
+    btn.classList.toggle('active',btn.dataset.filter===filter);
+  });
+  renderSongList();
 }
 
 function renderSongList(){
-  const q=searchInput.value.toLowerCase();
-   const songs=getSongs();
-
+  const q=searchInput.value.trim().toLowerCase();
+  const songs=getSongs();
   listEl.innerHTML='';
 
-  const filtered=songs.filter(song=>
-    song.title.toLowerCase().includes(q)
-  );
+  const filtered=songs.filter(song=>{
+    const matchesText =
+      (song.title||'').toLowerCase().includes(q) ||
+      (song.body||'').toLowerCase().includes(q);
+
+    const matchesCat =
+      currentFilter==='Todas' || (song.category||'Otra')===currentFilter;
+
+    return matchesText && matchesCat;
+  });
 
   if(!filtered.length){
-    listEl.innerHTML='<div class="smallnote">No hay canciones todavía 🎸</div>';
+    listEl.innerHTML='<div class="smallnote">No hay canciones en esta vista 🎸</div>';
     return;
   }
 
   filtered.forEach(song=>{
     const item=document.createElement('div');
-    item.className='song-item';
-    item.innerHTML='🎵 '+song.title+' · '+song.key;
+    item.className='song-item'+(song.id===currentId?' active':'');
     item.onclick=()=>loadSong(song.id);
+
+    item.innerHTML=`
+      <div class="song-title">🎵 ${escapeHtml(song.title||'Sin título')}</div>
+      <div class="song-meta">${escapeHtml(song.key||'C')} · ${escapeHtml(song.category||'Otra')}</div>
+    `;
     listEl.appendChild(item);
   });
 }
@@ -424,106 +515,138 @@ function newSong(){
   titleEl.value='';
   bodyEl.value='';
   keyEl.value='C';
+  catEl.value='Campirano';
   titleEl.focus();
+  renderSongList();
+  showStatus('Nueva rola lista ✨');
 }
 
 function saveSong(){
-   const title=titleEl.value.trim();
+  const title=titleEl.value.trim();
   const body=bodyEl.value;
   const key=keyEl.value;
+  const category=catEl.value;
 
   if(!title){
     showStatus('Ponle nombre a la rola 🎸');
+    titleEl.focus();
     return;
   }
 
   const songs=getSongs();
+  const now=new Date().toISOString();
 
   if(!currentId){
     currentId=makeId();
-    songs.unshift({
-      id:currentId,
-      title,
-      body,
-      key
-    });
+    songs.unshift({id:currentId,title,body,key,category,createdAt:now,updatedAt:now});
   }else{
     const idx=songs.findIndex(s=>s.id===currentId);
-
     if(idx>=0){
-      songs[idx]={
-        ...songs[idx],
-        title,
-        body,
-        key
-      };
+      songs[idx]={...songs[idx],title,body,key,category,updatedAt:now};
+    }else{
+      songs.unshift({id:currentId,title,body,key,category,createdAt:now,updatedAt:now});
     }
   }
-   setSongs(songs);
+
+  setSongs(songs);
   renderSongList();
   showStatus('Guardado 💾');
 }
 
 function loadSong(id){
   const song=getSongs().find(s=>s.id===id);
-  if(!song)return;
+  if(!song) return;
 
   currentId=song.id;
-  titleEl.value=song.title;
-  bodyEl.value=song.body;
-  keyEl.value=song.key;
+  titleEl.value=song.title||'';
+  bodyEl.value=song.body||'';
+  keyEl.value=song.key||'C';
+  catEl.value=song.category||'Otra';
 
+  renderSongList();
   showStatus('Rola abierta 🎶');
 }
 
 function deleteSong(){
-  if(!currentId)return;
+  if(!currentId){
+    showStatus('No hay rola seleccionada');
+    return;
+  }
+
+  if(!confirm('¿Borrar esta rola?')) return;
 
   const songs=getSongs().filter(s=>s.id!==currentId);
   setSongs(songs);
   newSong();
   renderSongList();
-  
   showStatus('Rola borrada 🗑️');
 }
 
+function normalizeRoot(root){
+  return flatToSharp[root] || root;
+}
+
 function transposeRoot(root,steps){
-  let idx=notes.indexOf(root);
-  if(idx<0)return root;
-  return notes[(idx+steps+12)%12];
+  const normalized=normalizeRoot(root);
+  const idx=sharpNotes.indexOf(normalized);
+  if(idx<0) return root;
+  return sharpNotes[(idx+steps+120)%12];
 }
 
 function transposeChord(chord,steps){
-  const match=chord.match(/^([A-G](#|b)?)(.*)$/);
+  const match=chord.match(/^([A-G](?:#|b)?)(.*)$/);
+  if(!match) return chord;
 
-  if(!match)return chord;
+  const root=match[1];
+  const rest=match[2]||'';
 
-  return transposeRoot(match[1],steps)+match[3];
+  return transposeRoot(root,steps)+rest;
 }
 
 function transposeSong(steps){
-  bodyEl.value=bodyEl.value.replace(/\b([A-G](#|b)?[^\s]*)\b/g,(c)=>{
-    return transposeChord(c,steps);
+  const chordRegex = /(^|[\s\[\(])([A-G](?:#|b)?(?:m|maj|min|dim|aug|sus|add|°|Δ)?[0-9]*(?:[#b][0-9]+)*(?:sus[0-9]*)?(?:add[0-9]*)?(?:\/[A-G](?:#|b)?)?)(?=$|[\s\]\),.;:])/gm;
+
+  bodyEl.value=bodyEl.value.replace(chordRegex,(full,prefix,chord)=>{
+    if(chord.includes('/')){
+      const parts=chord.split('/');
+      return prefix + transposeChord(parts[0],steps) + '/' + transposeChord(parts[1],steps);
+    }
+    return prefix + transposeChord(chord,steps);
   });
 
   keyEl.value=transposeRoot(keyEl.value,steps);
-
   autoSave();
+  showStatus(steps>0 ? 'Tono subido 🎼' : 'Tono bajado 🎼');
 }
+
+function getSearchText(){
+  return (titleEl.value.trim() || 'cancion acordes guitarra');
+}
+
 function searchLaCuerda(){
-  const q=encodeURIComponent(titleEl.value);
-  window.open('https://www.google.com/search?q=site:lacuerda.net+'+q,'_blank');
+  const q=encodeURIComponent(getSearchText());
+  window.open('https://www.google.com/search?q=site%3Alacuerda.net+'+q,'_blank');
 }
 
 function searchUltimate(){
-  const q=encodeURIComponent(titleEl.value);
-  window.open('https://www.google.com/search?q=site:ultimate-guitar.com+'+q,'_blank');
+  const q=encodeURIComponent(getSearchText());
+  window.open('https://www.google.com/search?q=site%3Aultimate-guitar.com+'+q,'_blank');
+}
+
+function searchYouTube(){
+  const q=encodeURIComponent(getSearchText()+' guitarra acordes');
+  window.open('https://www.youtube.com/results?search_query='+q,'_blank');
+}
+
+function openMoises(){
+  window.open('https://moises.ai/es/','_blank');
 }
 
 function openTeleprompter(){
   tele.classList.add('active');
-  teleContent.textContent=bodyEl.value;
+  teleContent.textContent=bodyEl.value || 'No hay letra todavía 🎸';
   teleContent.scrollTop=0;
+  teleContent.style.fontSize=teleFont+'px';
 }
 
 function closeTeleprompter(){
@@ -533,55 +656,121 @@ function closeTeleprompter(){
 
 function playTele(){
   stopTele();
-
   teleTimer=setInterval(()=>{
     teleContent.scrollTop+=teleSpeed;
   },40);
 }
+
 function stopTele(){
-  clearInterval(teleTimer);
+  if(teleTimer) clearInterval(teleTimer);
+  teleTimer=null;
 }
 
 function speedUp(){
   teleSpeed+=0.4;
+  showStatus('Velocidad: '+teleSpeed.toFixed(1));
 }
 
 function speedDown(){
   teleSpeed=Math.max(0.2,teleSpeed-0.4);
+  showStatus('Velocidad: '+teleSpeed.toFixed(1));
+}
+
+function fontUp(){
+  teleFont=Math.min(90,teleFont+4);
+  teleContent.style.fontSize=teleFont+'px';
+}
+
+function fontDown(){
+  teleFont=Math.max(24,teleFont-4);
+  teleContent.style.fontSize=teleFont+'px';
 }
 
 function downloadBackup(){
   const songs=getSongs();
+  const backup={
+    app:'Cancionero Pro V4',
+    exportedAt:new Date().toISOString(),
+    songs
+  };
 
-  const blob=new Blob(
-    [JSON.stringify(songs,null,2)],
-    {type:'application/json'}
-  );
-
+  const blob=new Blob([JSON.stringify(backup,null,2)],{type:'application/json'});
   const a=document.createElement('a');
   a.href=URL.createObjectURL(blob);
-  a.download='backup-cancionero.json';
+  a.download='backup-cancionero-pro-v4.json';
   a.click();
-
   URL.revokeObjectURL(a.href);
 
-  showStatus('Backup descargado 📦');
+  showStatus('Backup exportado 📦');
 }
+
+function importBackup(event){
+  const file=event.target.files[0];
+  if(!file) return;
+
+  const reader=new FileReader();
+  reader.onload=()=>{
+    try{
+      const data=JSON.parse(reader.result);
+      const imported=Array.isArray(data) ? data : (data.songs || []);
+
+      if(!Array.isArray(imported)){
+        throw new Error('Formato inválido');
+      }
+
+      const current=getSongs();
+      const merged=[...imported,...current];
+      const unique=[];
+      const seen=new Set();
+
+      merged.forEach(song=>{
+        const id=song.id || makeId();
+        if(seen.has(id)) return;
+        seen.add(id);
+        unique.push({
+          id,
+          title:song.title || 'Sin título',
+          body:song.body || '',
+          key:song.key || 'C',
+          category:song.category || 'Otra',
+          createdAt:song.createdAt || new Date().toISOString(),
+          updatedAt:new Date().toISOString()
+        });
+      });
+
+      setSongs(unique);
+      renderSongList();
+      showStatus('Backup importado 📥');
+    }catch(err){
+      showStatus('Error importando JSON');
+      alert('No se pudo importar el archivo JSON.');
+    }
+  };
+
+  reader.readAsText(file);
+  event.target.value='';
+}
+
 function autoSave(){
-  if(!currentId)return;
+  if(!currentId) return;
   saveSong();
 }
 
 bodyEl.addEventListener('input',()=>{
   clearTimeout(window.autoSaveTimer);
-
-  window.autoSaveTimer=setTimeout(()=>{
-    autoSave();
-  },1200);
+  window.autoSaveTimer=setTimeout(()=>autoSave(),1200);
 });
 
+titleEl.addEventListener('input',()=>{
+  clearTimeout(window.autoSaveTitleTimer);
+  window.autoSaveTitleTimer=setTimeout(()=>autoSave(),1200);
+});
+
+keyEl.addEventListener('change',autoSave);
+catEl.addEventListener('change',autoSave);
+
 window.addEventListener('keydown',(e)=>{
-  if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='s'){
+  if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='s'){
     e.preventDefault();
     saveSong();
   }
@@ -596,5 +785,3 @@ renderSongList();
 
 </body>
 </html>
-
-  
